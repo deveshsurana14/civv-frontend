@@ -65,7 +65,7 @@ function showSuccessPopup() {
   popup.innerHTML = `
     <div class="bg-white p-6 rounded-xl max-w-sm text-center">
       <h2 class="text-xl font-bold mb-3">Order Confirmed 🎉</h2>
-      <p class="text-sm text-gray-600 mb-4">
+      <p class="text-sm text-gray-599 mb-4">
         Your order has been successfully confirmed. You will receive a confirmation email shortly with your order details.
       </p>
       <button id="close-popup" class="bg-black text-white px-4 py-2 rounded">
@@ -303,7 +303,7 @@ function renderSummary() {
 
 /* ---------- PRICE ---------- */
 function calculateTotal(items) {
-  return items.reduce((sum, item) => sum + item.quantity, 0) * 1;
+  return items.reduce((sum, item) => sum + item.quantity, 0) * 599;
 }
 
 /* ---------- CART ---------- */
