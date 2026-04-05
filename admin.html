@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Civv Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+  <!-- LOGIN -->
+  <div id="login-box" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+    <h2 class="text-xl font-bold mb-4">Admin Login</h2>
+
+    <input id="username" placeholder="Username"
+      class="w-full border p-2 mb-3 rounded">
+
+    <input id="password" type="password" placeholder="Password"
+      class="w-full border p-2 mb-4 rounded">
+
+    <button onclick="login()"
+      class="w-full bg-black text-white py-2 rounded">
+      Login
+    </button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden max-w-4xl mx-auto">
+
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Orders</h1>
+      <button onclick="logout()"
+        class="bg-red-500 text-white px-4 py-2 rounded">
+        Logout
+      </button>
+    </div>
+
+    <div id="orders" class="space-y-4"></div>
+
+  </div>
+
+<script>
+let token = localStorage.getItem("adminToken") || "";
+
+/* AUTO LOGIN */
+if (token) {
+  document.getElementById("login-box").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+  loadOrders();
+}
+
+/* LOGIN */
+async function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const res = await fetch("http://localhost:5000/admin-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (data.token) {
+      token = data.token;
+
+      // ✅ SAVE TOKEN
+      localStorage.setItem("adminToken", token);
+
+      document.getElementById("login-box").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+
+      loadOrders();
+    } else {
+      alert("Invalid login");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+
+/* LOAD ORDERS */
+async function loadOrders() {
+  try {
+    const res = await fetch("http://localhost:5000/orders", {
+      headers: {
+        "Authorization": token
+      }
+    });
+
+    if (!res.ok) {
+      alert("Session expired. Please login again.");
+      logout();
+      return;
+    }
+
+    const orders = await res.json();
+
+    const container = document.getElementById("orders");
+    container.innerHTML = "";
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>No orders found</p>";
+      return;
+    }
+
+    orders.forEach(order => {
+      container.innerHTML += `
+        <div class="bg-white p-4 rounded shadow">
+          <p><b>Name:</b> ${order.name}</p>
+          <p><b>Phone:</b> ${order.phone}</p>
+          <p><b>Email:</b> ${order.email}</p>
+          <p><b>Address:</b> ${order.address}</p>
+          <p><b>Amount:</b> ₹${order.amount}</p>
+          <p><b>Payment ID:</b> ${order.paymentId}</p>
+          <p class="text-xs text-gray-500">${new Date(order.date).toLocaleString()}</p>
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+
+/* LOGOUT */
+function logout() {
+  localStorage.removeItem("adminToken");
+  token = "";
+
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("login-box").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>

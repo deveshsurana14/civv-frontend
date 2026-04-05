@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Civv Core — Oversized Cotton Tees</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ⚠️ Note: Tailwind CDN ok for now (dev), replace in production -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Razorpay -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    
+    <div class="flex items-center gap-2">
+  <img src="assets/images/logo.jpg" alt="CIVV Logo" class="h-14">
+  <h1 class="text-2xl font-bold tracking-wide">Civv</h1>
+    </div>
+
+    <button id="cart-icon" class="relative font-medium">
+      Cart
+      <span id="cart-count"
+        class="absolute -top-2 -right-3 bg-black text-white text-xs px-2 py-0.5 rounded-full">
+        0
+      </span>
+    </button>
+
+  </div>
+</header>
+
+<section class="py-8 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-8 md:gap-12">
+
+    <!-- Image -->
+    <div>
+      <img id="main-image"
+        src="assets/images/white.jpg"
+        class="w-full rounded-lg shadow-sm">
+    </div>
+
+    <!-- Product Info -->
+    <div>
+
+      <h2 class="text-2xl md:text-4xl font-bold mb-3">
+        Civv Core - Oversized Cotton Tees
+      </h2>
+
+      <p class="text-gray-600 mb-4">
+        Engineered for structure. Designed for everyday comfort.
+      </p>
+
+      <p class="text-2xl font-semibold mb-6">₹600</p>
+
+      <!-- Color -->
+      <div class="mb-6">
+        <p class="font-medium mb-2">Color</p>
+        <div id="color-options" class="flex gap-3 flex-wrap"></div>
+      </div>
+
+      <!-- Size -->
+      <div class="mb-6">
+        <p class="font-medium mb-1">Size</p>
+        <p class="text-xs text-gray-500 mb-2">
+          Select sizes, then click "Add to Cart"
+        </p>
+
+        <div id="size-options" class="flex gap-3 flex-wrap"></div>
+
+        <button id="size-chart-btn"
+          class="text-sm text-blue-600 underline mt-2">
+          View Size Chart
+        </button>
+      </div>
+
+      <!-- Selected Summary -->
+      <div class="mb-6">
+        <p class="font-medium mb-2">Selected Items</p>
+        <div id="selected-summary" class="space-y-2 text-sm"></div>
+
+        <div class="flex justify-between mt-3 font-semibold">
+          <span>Total</span>
+          <span id="live-total">₹0</span>
+        </div>
+      </div>
+
+      <!-- CUSTOMER FORM -->
+      <div class="mb-6 space-y-3">
+
+        <h3 class="font-semibold text-lg">Delivery Details</h3>
+
+        <input id="name" placeholder="Full Name"
+          class="w-full border p-3 rounded-lg text-sm">
+
+        <input id="phone" placeholder="Phone Number"
+          class="w-full border p-3 rounded-lg text-sm">
+
+        <input id="email" placeholder="Email Address"
+          class="w-full border p-3 rounded-lg text-sm">
+
+        <textarea id="address"
+          placeholder="Full Delivery Address"
+          class="w-full border p-3 rounded-lg text-sm"></textarea>
+
+      </div>
+
+      <!-- Buttons -->
+      <button id="add-to-cart"
+        class="w-full bg-black text-white py-3 rounded-lg">
+        Add To Cart
+      </button>
+
+      <button id="go-to-cart"
+        class="w-full mt-3 bg-green-600 text-white py-3 rounded-lg hidden">
+        Proceed to Checkout
+      </button>
+
+      <button id="buy-now"
+        class="w-full mt-3 border border-black py-3 rounded-lg">
+        Buy Now
+      </button>
+
+      <!-- PREMIUM DESCRIPTION -->
+      <div class="mt-6 text-sm text-gray-700 leading-relaxed space-y-2">
+
+        <p class="font-medium text-black">
+          Crafted for structure, built for everyday wear.
+        </p>
+
+        <p>
+          This 240 GSM French Terry cotton tee delivers a heavyweight feel with a clean silhouette, designed to hold its shape while staying breathable and comfortable throughout the day.
+        </p>
+
+        <div class="mt-3 space-y-1 text-gray-600">
+          <p>• Premium 240 GSM fabric for long-lasting durability</p>
+          <p>• Structured fit that maintains its shape</p>
+          <p>• Soft-touch interior for all-day comfort</p>
+          <p>• Minimal design for versatile everyday styling</p>
+        </div>
+
+        <!-- 🔥 TRUST SECTION -->
+        <div class="mt-4 border-t pt-3 text-gray-600 space-y-1">
+          <p>✔ 7-day easy exchange for size issues</p>
+          <p>✔ Each product quality checked before dispatch</p>
+          <p>✔ Secure prepaid checkout powered by Razorpay</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SIZE CHART MODAL -->
+<div id="size-chart-modal"
+  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+
+  <div class="bg-white p-4 rounded-lg max-w-md w-full relative">
+
+    <button id="close-size-chart"
+      class="absolute top-2 right-3 text-xl font-bold">
+      ×
+    </button>
+
+    <img src="assets/images/size-chart.jpg"
+      class="w-full rounded">
+
+  </div>
+</div>
+
+<!-- Overlay -->
+<div id="overlay"
+  class="fixed inset-0 bg-black bg-opacity-40 hidden z-40"></div>
+
+<!-- Cart Drawer -->
+<div id="cart-modal"
+  class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl p-6 transform translate-x-full transition-transform duration-300 z-50">
+
+  <div class="flex justify-between items-center mb-6">
+    <h3 class="text-xl font-bold">Your Cart</h3>
+    <button id="close-cart" class="text-xl font-bold">×</button>
+  </div>
+
+  <div id="cart-items" class="space-y-4"></div>
+
+  <div class="border-t pt-4 mt-4">
+    <div class="flex justify-between font-semibold">
+      <span>Total</span>
+      <span id="cart-total">₹0</span>
+    </div>
+
+    <button id="checkout-btn"
+      class="w-full mt-4 bg-black text-white py-3 rounded-lg">
+      Checkout
+    </button>
+  </div>
+</div>
+
+<!-- 🔥 FOOTER (IMPORTANT FOR TRUST + RAZORPAY) -->
+<footer class="mt-10 py-6 text-center text-sm text-gray-500 border-t">
+
+  <p class="mb-2">© 2026 Civv. All rights reserved.</p>
+
+  <div class="space-x-4">
+    <a href="/privacy.html" class="underline">Privacy Policy</a>
+    <a href="/terms.html" class="underline">Terms & Conditions</a>
+    <a href="/refund.html" class="underline">Refund Policy</a>
+  </div>
+
+</footer>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
