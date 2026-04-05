@@ -82,8 +82,7 @@ function showSuccessPopup() {
 }
 
 /* ---------- PAYMENT ---------- */
-function startPayment(items, description) {
-
+async function startPayment(items, description) {
   const totalAmount = calculateTotal(items);
 
   const customer = {
@@ -98,20 +97,25 @@ function startPayment(items, description) {
     return;
   }
 
-  fetch(`${API}/create-order`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: totalAmount })
-  })
-  .then(res => res.json())
-  .then(order => {
+  try {
+    const res = await fetch(`${API}/create-order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: totalAmount })
+    });
+
+    if (!res.ok) {
+      throw new Error("Order creation failed");
+    }
+
+    const order = await res.json();
 
     const options = {
-      key: "rzp_test_SYzGigbTQSPN8A",
+      key: "rzp_live_SZozO6o2xOQkNw", 
       amount: order.amount,
       currency: "INR",
       name: "Civv",
-      description: description,
+      description,
       order_id: order.id,
 
       prefill: {
@@ -122,7 +126,7 @@ function startPayment(items, description) {
 
       handler: async function (response) {
         try {
-          const verify = await fetch(`${API}/verify-payment`, {
+          const verifyRes = await fetch(`${API}/verify-payment`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -133,44 +137,47 @@ function startPayment(items, description) {
             })
           });
 
-          const data = await verify.json();
+          const data = await verifyRes.json();
 
-          if (data.success) {
-
-            setTimeout(showSuccessPopup, 300);
-
-            state.cart = [];
-            state.selections = [];
-
-            document.getElementById("selected-summary").innerHTML = "";
-            document.getElementById("live-total").textContent = "₹0";
-
-            document.getElementById("name").value = "";
-            document.getElementById("phone").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("address").value = "";
-
-            await loadStock();
-
-            renderSizes();
-            renderSummary();
-            updateCartUI();
-
-          } else {
-            alert(data.error || "Payment failed");
+          if (!verifyRes.ok || !data.success) {
+            throw new Error(data.error || "Verification failed");
           }
 
+          setTimeout(showSuccessPopup, 300);
+
+          state.cart = [];
+          state.selections = [];
+
+          document.getElementById("selected-summary").innerHTML = "";
+          document.getElementById("live-total").textContent = "₹0";
+
+          document.getElementById("name").value = "";
+          document.getElementById("phone").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("address").value = "";
+
+          await loadStock();
+
+          renderSizes();
+          renderSummary();
+          updateCartUI();
+
         } catch (err) {
-          console.error(err);
-          alert("Post-payment error");
+          console.error("Verification error:", err);
+          alert("Payment verification failed");
         }
       },
 
       theme: { color: "#000000" }
     };
 
-    new Razorpay(options).open();
-  });
+    const rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch (err) {
+    console.error("Payment error:", err);
+    alert("Something went wrong. Try again.");
+  }
 }
 
 /* ---------- COLORS ---------- */
