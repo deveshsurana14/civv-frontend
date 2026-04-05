@@ -303,7 +303,7 @@ function renderSummary() {
 
 /* ---------- PRICE ---------- */
 function calculateTotal(items) {
-  return items.reduce((sum, item) => sum + item.quantity, 0) * 600;
+  return items.reduce((sum, item) => sum + item.quantity, 0) * 1;
 }
 
 /* ---------- CART ---------- */
