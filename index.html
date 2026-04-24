@@ -5,22 +5,18 @@
   <title>Civv Core — Oversized Cotton Tees</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ⚠️ Note: Tailwind CDN ok for now (dev), replace in production -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Razorpay -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body class="bg-gray-50 text-gray-900 overflow-x-hidden">
 
-<!-- Header -->
 <header class="bg-white border-b">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     
     <div class="flex items-center gap-2">
-  <img src="assets/images/logo.jpg" alt="CIVV Logo" class="h-14">
-  <h1 class="text-2xl font-bold tracking-wide">Civv</h1>
+      <img src="assets/images/logo.jpg" alt="CIVV Logo" class="h-14">
+      <h1 class="text-2xl font-bold tracking-wide">Civv</h1>
     </div>
 
     <button id="cart-icon" class="relative font-medium">
@@ -37,14 +33,12 @@
 <section class="py-8 md:py-16 bg-white">
   <div class="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-8 md:gap-12">
 
-    <!-- Image -->
     <div>
       <img id="main-image"
         src="assets/images/white.jpg"
         class="w-full rounded-lg shadow-sm">
     </div>
 
-    <!-- Product Info -->
     <div>
 
       <h2 class="text-2xl md:text-4xl font-bold mb-3">
@@ -55,7 +49,14 @@
         Engineered for structure. Designed for everyday comfort.
       </p>
 
-      <p class="text-2xl font-semibold mb-6">₹300</p>
+      <!-- 🔥 UPDATED PRICE -->
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-3xl font-bold text-black">₹299</span>
+        <span class="text-lg text-gray-400 line-through">₹1299</span>
+        <span class="text-sm font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-full">
+          77% OFF
+        </span>
+      </div>
 
       <!-- Color -->
       <div class="mb-6">
@@ -109,7 +110,6 @@
 
       </div>
 
-      <!-- Buttons -->
       <button id="add-to-cart"
         class="w-full bg-black text-white py-3 rounded-lg">
         Add To Cart
@@ -125,7 +125,6 @@
         Buy Now
       </button>
 
-      <!-- PREMIUM DESCRIPTION -->
       <div class="mt-6 text-sm text-gray-700 leading-relaxed space-y-2">
 
         <p class="font-medium text-black">
@@ -143,7 +142,6 @@
           <p>• Minimal design for versatile everyday styling</p>
         </div>
 
-        <!-- 🔥 TRUST SECTION -->
         <div class="mt-4 border-t pt-3 text-gray-500 space-y-1">
           <p>✔ 7-day easy exchange for size issues</p>
           <p>✔ Each product quality checked before dispatch</p>
@@ -156,7 +154,6 @@
   </div>
 </section>
 
-<!-- SIZE CHART MODAL -->
 <div id="size-chart-modal"
   class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
 
@@ -173,11 +170,9 @@
   </div>
 </div>
 
-<!-- Overlay -->
 <div id="overlay"
   class="fixed inset-0 bg-black bg-opacity-40 hidden z-40"></div>
 
-<!-- Cart Drawer -->
 <div id="cart-modal"
   class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl p-6 transform translate-x-full transition-transform duration-300 z-50">
 
@@ -201,7 +196,6 @@
   </div>
 </div>
 
-<!-- 🔥 FOOTER (IMPORTANT FOR TRUST + RAZORPAY) -->
 <footer class="mt-10 py-6 text-center text-sm text-gray-500 border-t">
 
   <p class="mb-2">© 2026 Civv. All rights reserved.</p>

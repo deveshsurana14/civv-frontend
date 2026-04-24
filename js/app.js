@@ -302,8 +302,10 @@ function renderSummary() {
 }
 
 /* ---------- PRICE ---------- */
+const PRODUCT_PRICE = 299;
+
 function calculateTotal(items) {
-  return items.reduce((sum, item) => sum + item.quantity, 0) * 300;
+  return items.reduce((sum, item) => sum + item.quantity, 0) * PRODUCT_PRICE;
 }
 
 /* ---------- CART ---------- */
